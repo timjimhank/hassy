@@ -1,0 +1,82 @@
+- alias: Bedroom Warmer (Night)
+  trigger:
+  - entity_id: sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature, input_number.bedroom_target_heat,
+      input_select.routines
+    platform: state
+  condition:
+  - condition: template
+    value_template: '{{ states.sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature.state
+      | round | int <= states.input_number.bedroom_target_heat.state | int - 1 }}'
+  - condition: state
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    state: heat
+  - condition: state
+    entity_id: input_select.routines
+    state: Night
+  action:
+  - data_template:
+      entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+      temperature: '{{ state_attr(''climate.radio_thermostat_company_of_america_ct50e_thermostat_mode'',''current_temperature'')
+        | int + 2 }}'
+    service: climate.set_temperature
+- alias: Bedroom Warmer Stage 2
+  trigger:
+  - entity_id: sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature, input_number.bedroom_target_heat
+    platform: state
+  condition:
+  - condition: template
+    value_template: '{{ states.sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature.state
+      | round | int >= states.input_number.bedroom_target_heat.state | int + 1 }}'
+  - condition: state
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    state: heat
+  - condition: state
+    entity_id: input_select.routines
+    state: Night
+  action:
+  - data_template:
+      entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+      temperature: '{{ state_attr(''climate.radio_thermostat_company_of_america_ct50e_thermostat_mode'',''current_temperature'')
+        | int - 2 }}'
+    service: climate.set_temperature
+- alias: Bedroom Cooler (Night)
+  trigger:
+  - entity_id: sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature, input_number.bedroom_target_cool,
+      input_select.routines
+    platform: state
+  condition:
+  - condition: template
+    value_template: '{{ states.sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature.state
+      | round | int >= states.input_number.bedroom_target_cool.state | int + 1 }}'
+  - condition: state
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    state: cool
+  - condition: state
+    entity_id: input_select.routines
+    state: Night
+  action:
+  - data_template:
+      entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+      temperature: '{{ state_attr(''climate.radio_thermostat_company_of_america_ct50e_thermostat_mode'',''current_temperature'')
+        | int - 2 }}'
+    service: climate.set_temperature
+- alias: Bedroom Cooler Stage 2
+  trigger:
+  - entity_id: sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature, input_number.bedroom_target_cool
+    platform: state
+  condition:
+  - condition: template
+    value_template: '{{ states.sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature.state
+      | round | int <= states.input_number.bedroom_target_cool.state | int - 1 }}'
+  - condition: state
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    state: cool
+  - condition: state
+    entity_id: input_select.routines
+    state: Night
+  action:
+  - data_template:
+      entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+      temperature: '{{ state_attr(''climate.radio_thermostat_company_of_america_ct50e_thermostat_mode'',''current_temperature'')
+        | int + 2 }}'
+    service: climate.set_temperature

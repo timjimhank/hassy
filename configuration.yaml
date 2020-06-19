@@ -1,0 +1,47 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+#New editor-friendly automations
+automation: !include automations.yaml
+#Old-timey automations with templates
+automation old: !include_dir_merge_list automation_old
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+#Limit what is recorded in the DB
+recorder:
+  # purge_keep_days: 3
+  # purge_interval: 1
+  include:
+    domains:
+      - binary_sensor
+      - automation
+      - lock
+      - input_select
+    entities:
+      - sensor.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_temperature
+      - climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+      - climate.qubino_goap_zmnhidx_flush_on_off_thermostat_h1s2p1_mode
+  exclude:
+    entities:
+      - binary_sensor.updater
+
+timer:
+  #Hallway night light
+  hallway:
+  #Furnace fan runs for this duration
+  fan_timer:
+  
+# Is it a weekday? NOTE - CONSIDERS HOLIDAYS
+binary_sensor:
+  - platform: workday
+    country: US

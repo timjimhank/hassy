@@ -1,0 +1,183 @@
+- id: '1592541598'
+  alias: Turn down the heat (Weekday)
+  trigger:
+  - entity_id: input_select.routines
+    platform: state
+    to: Weekday
+  condition:
+  - condition: state
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    state: heat
+  action:
+  - data:
+      temperature: 65
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    service: climate.set_temperature
+- id: '1592541749'
+  alias: Turn up the heat (Home)
+  trigger:
+  - entity_id: input_select.routines
+    platform: state
+    to: Home
+  condition:
+  - condition: state
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    state: heat
+  action:
+  - data:
+      temperature: 70
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    service: climate.set_temperature
+- id: '1592541775'
+  alias: Turn down the AC (Weekday)
+  trigger:
+  - entity_id: input_select.routines
+    platform: state
+    to: Weekday
+  condition:
+  - condition: state
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    state: cool
+  action:
+  - data:
+      temperature: 78
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    service: climate.set_temperature
+- id: '1592541793'
+  alias: Turn up the AC (Home)
+  trigger:
+  - entity_id: input_select.routines
+    platform: state
+    to: Home
+  condition:
+  - condition: state
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    state: cool
+  action:
+  - data:
+      temperature: 76
+    entity_id: climate.radio_thermostat_company_of_america_ct50e_thermostat_mode
+    service: climate.set_temperature
+- id: '1592443674159'
+  alias: Hallway Night Light
+  description: ''
+  trigger:
+  - entity_id: binary_sensor.linear_nortek_security_control_llc_wadwaz_1_door_window_sensor_sensor
+    from: 'off'
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.linear_nortek_security_control_llc_wadwaz_1_door_window_sensor_sensor_2
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - after: '19:00:00'
+    before: 08:00:00
+    condition: time
+  action:
+  - data:
+      brightness_pct: 25
+      xy_color:
+      - 1
+      - 0
+    entity_id: light.hall_led_strip_3a520200_level_light_color_on_off
+    service: light.turn_on
+  - data: {}
+    entity_id: timer.hallway
+    service: timer.cancel
+  - data:
+      duration: 00:10:00
+    entity_id: timer.hallway
+    service: timer.start
+- id: '1592445884006'
+  alias: Hallway Night Light Timeout
+  description: ''
+  trigger:
+  - event_data:
+      entity_id: timer.hallway
+    event_type: timer.finished
+    platform: event
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.hall_led_strip_3a520200_level_light_color_on_off
+    service: light.turn_off
+- id: '1592540211242'
+  alias: Routine Switch (Weekend or Holiday)
+  description: ''
+  trigger:
+  - at: '10:00:00'
+    platform: time
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.routines
+      state: None
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'off'
+    - condition: state
+      entity_id: automation.routine_switch_weekday
+      state: 'off'
+  action:
+  - data:
+      option: Home
+    entity_id: input_select.routines
+    service: input_select.select_option
+- id: '1592540587361'
+  alias: Routine Switch (Weekday)
+  description: Normally triggers when we go to work
+  trigger:
+  - at: '10:00:00'
+    platform: time
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.routines
+      state: None
+  - condition: state
+    entity_id: binary_sensor.workday_sensor
+    state: 'on'
+  action:
+  - data:
+      option: Weekday
+    entity_id: input_select.routines
+    service: input_select.select_option
+- id: '1592540981120'
+  alias: Routine Switch (Evening)
+  description: Prep the house for the evening
+  trigger:
+  - at: '16:00:00'
+    platform: time
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.routines
+      state: None
+  action:
+  - data:
+      option: Home
+    entity_id: input_select.routines
+    service: input_select.select_option
+- id: '1592541160991'
+  alias: Routine Switch (Night)
+  description: Prep the house for bedtime
+  trigger:
+  - at: '21:00:00'
+    platform: time
+  condition:
+  - condition: not
+    conditions:
+    - condition: state
+      entity_id: input_select.routines
+      state: None
+  action:
+  - data:
+      option: Night
+    entity_id: input_select.routines
+    service: input_select.select_option
