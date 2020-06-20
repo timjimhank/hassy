@@ -181,3 +181,78 @@
       option: Night
     entity_id: input_select.routines
     service: input_select.select_option
+- id: '1569790784616'
+  alias: 'Remote: Living Room On'
+  trigger:
+  - event_data:
+      entity_id: zwave.hank_electronics_ltd_hkzw_scn04_scene_controller_2
+      scene_id: 4
+    event_type: zwave.scene_activated
+    platform: event
+  condition: []
+  action:
+  - data:
+      entity_id: switch.inovelli_nzw36_1_channel_smart_plug_w_scene_switch_2
+    service: switch.turn_on
+  - data:
+      entity_id: switch.everspring_an163_plug_in_on_off_with_meter_function_switch
+    service: switch.turn_on
+- id: '1569791063131'
+  alias: 'Remote: Living Room Off'
+  trigger:
+  - event_data:
+      entity_id: zwave.hank_electronics_ltd_hkzw_scn04_scene_controller_2
+      scene_id: 3
+    event_type: zwave.scene_activated
+    platform: event
+  condition: []
+  action:
+  - data:
+      entity_id: switch.inovelli_nzw36_1_channel_smart_plug_w_scene_switch_2
+    service: switch.turn_off
+  - data:
+      entity_id: switch.everspring_an163_plug_in_on_off_with_meter_function_switch
+    service: switch.turn_off
+- id: '1568773160808'
+  alias: 'Remote: Toggle Bed Lamp'
+  trigger:
+  - event_data:
+      entity_id: zwave.hank_electronics_ltd_hkzw_scn04_scene_controller
+      scene_id: 1
+    event_type: zwave.scene_activated
+    platform: event
+  condition: []
+  action:
+  - alias: ''
+    data:
+      entity_id: light.linear_nortek_security_control_llc_lb60z_1_dimmable_led_light_bulb_level
+    service: light.toggle
+- id: '1568773611690'
+  alias: 'Remote: Toggle Bed Ceiling'
+  trigger:
+  - event_data:
+      entity_id: zwave.hank_electronics_ltd_hkzw_scn04_scene_controller
+      scene_id: 4
+    event_type: zwave.scene_activated
+    platform: event
+  condition: []
+  action:
+  - data:
+      entity_id: light.jasco_products_12729_3_way_dimmer_switch_level
+    service: light.toggle
+- id: '1568773863090'
+  alias: 'Remote: Turn Off Bed Lights'
+  trigger:
+  - event_data:
+      entity_id: zwave.hank_electronics_ltd_hkzw_scn04_scene_controller
+      scene_id: 3
+    event_type: zwave.scene_activated
+    platform: event
+  condition: []
+  action:
+  - data:
+      entity_id: light.jasco_products_12729_3_way_dimmer_switch_level
+    service: light.turn_off
+  - data:
+      entity_id: light.linear_nortek_security_control_llc_lb60z_1_dimmable_led_light_bulb_level
+    service: light.turn_off
